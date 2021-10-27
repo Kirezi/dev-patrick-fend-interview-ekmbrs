@@ -1,12 +1,13 @@
 import {
   HttpClientTestingModule,
-  HttpTestingController
-} from "@angular/common/http/testing";
-import { TestBed, waitForAsync } from "@angular/core/testing";
-import { UserService } from "./user.service";
+  HttpTestingController,
+} from '@angular/common/http/testing';
+import { TestBed, waitForAsync, fakeAsync, tick } from '@angular/core/testing';
+import { User } from './user';
+import { UserService } from './user.service';
 
-describe("UserService", () => {
-  const usersJson = "/assets/users.json";
+describe('UserService', () => {
+  const usersJson = '/assets/users.json';
 
   let httpMock: HttpTestingController;
   let userService: UserService;
@@ -15,7 +16,7 @@ describe("UserService", () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
-        providers: [UserService]
+        providers: [UserService],
       }).compileComponents();
     })
   );
@@ -25,25 +26,29 @@ describe("UserService", () => {
     userService = TestBed.inject(UserService);
   });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(userService).toBeTruthy();
   });
 
-  describe("when getUsers$() is successful", () => {
+  describe('when getUsers$() is successful', () => {
     const usersResponse = [
       {
-        id: "u_8nB75i9",
-        name: "John Placeholder",
-        email: "john.placeholder@fakemail.com",
-        created_at: "2021-03-16T19:38:45.850Z",
-        confirmed: true
-      }
+        id: 'u_8nB75i9',
+        name: 'John Placeholder',
+        email: 'john.placeholder@fakemail.com',
+        created_at: '2021-03-16T19:38:45.850Z',
+        confirmed: true,
+      },
     ];
 
-    it("should return something", () => {
-      userService.getUsers$().subscribe();
-
-      httpMock.expectOne(usersJson).flush(usersResponse);
+    it('should return something', () => {
+      userService.getUsers$().subscribe((users) => {
+        expect(users.length).toBe(1);
+        expect(users).toEqual(usersResponse);
+      });
+      const req = httpMock.expectOne(usersJson);
+      expect(req.request.method).toBe('GET');
+      req.flush(usersResponse);
     });
   });
 });
