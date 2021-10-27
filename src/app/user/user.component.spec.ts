@@ -11,8 +11,9 @@ import {
 } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { UserServiceMock } from '../mock/user.service.mock';
+import { UserService } from '../service/user.service';
 import { UserComponent } from './user.component';
-import { UserService } from './user.service';
+
 
 describe('UserComponent', () => {
   let component: UserComponent;

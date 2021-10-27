@@ -3,7 +3,6 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed, waitForAsync, fakeAsync, tick } from '@angular/core/testing';
-import { User } from './user';
 import { UserService } from './user.service';
 
 describe('UserService', () => {
